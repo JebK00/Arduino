@@ -11,8 +11,8 @@ void setup() {
 
 void loop() {
   lumG = analogRead(A0);
-  lumC = analogRead(A1);
-  lumD = analogRead(A2);
+  lumC = analogRead(A2);
+  lumD = analogRead(A1);
   Serial.print("lumG: ");
   Serial.print(lumG);
   Serial.print(" - lumC: ");

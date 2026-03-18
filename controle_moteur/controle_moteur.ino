@@ -8,6 +8,9 @@ const int MG_controlPin1 = 8;
 const int MG_controlPin2 = 9;
 const int MG_enablePin = 10;
 
+const int lumGPin = A0;
+const int lumDPin = A1;
+
 /// initiate motors status; 0 = off   1 = on 
 int MD_status = 0;
 int MG_status = 0;
@@ -15,6 +18,10 @@ int MG_status = 0;
 /// initiate motors direction; 0 = forward   1 = rearward
 int MD_direction = 0;
 int MG_direction = 0;
+
+/// initiate lum data
+int lumG;
+int lumD;
 
 void setup() {
   pinMode(MD_controlPin1, OUTPUT);
@@ -24,28 +31,43 @@ void setup() {
   pinMode(MG_controlPin1, OUTPUT);
   pinMode(MG_controlPin2, OUTPUT);
   pinMode(MG_enablePin, OUTPUT);
+  Serial.begin(9600);
 }
 
 void loop() {
-  digitalWrite(MD_controlPin1, HIGH);
-  digitalWrite(MD_controlPin2, LOW);
-  digitalWrite(MG_controlPin1, HIGH);
-  digitalWrite(MG_controlPin2, LOW);
-  while (millis() < 5000){
-    analogWrite(MD_enablePin, HIGH);
-    analogWrite(MG_enablePin, HIGH);
+  lumG = analogRead(lumGPin);
+  lumD = analogRead(lumDPin);
+  Serial.print("lumG: ");
+  Serial.print(lumG);
+  Serial.print(" - lumD: ");
+  Serial.println(lumD);  
+  if (abs(lumG-lumD)<200){
+    digitalWrite(MD_controlPin1, HIGH);
+    digitalWrite(MD_controlPin2, LOW);
+    digitalWrite(MG_controlPin1, HIGH);
+    digitalWrite(MG_controlPin2, LOW);
+    analogWrite(MD_enablePin, 200);
+    analogWrite(MG_enablePin, 200);
+    Serial.println("For");
   }
-  while (millis() < 10000 && millis() >= 5000){
-    analogWrite(MD_enablePin, 191);
-    analogWrite(MG_enablePin, 191);
+  if (abs(lumG-lumD)>100 && min(lumG, lumD) == lumG){
+    delay(500);
+    digitalWrite(MD_controlPin1, HIGH);
+    digitalWrite(MD_controlPin2, LOW);
+    digitalWrite(MG_controlPin1, LOW);
+    digitalWrite(MG_controlPin2, HIGH);
+    analogWrite(MD_enablePin, 255);
+    analogWrite(MG_enablePin, 255);
+    Serial.println("left");
   }
-  while (millis() < 15000 && millis() >= 10000){
-    analogWrite(MD_enablePin, 127);
-    analogWrite(MG_enablePin, 127);
+  if (abs(lumG-lumD)>200 && min(lumG, lumD) == lumD){
+    delay(500);
+    digitalWrite(MD_controlPin1, LOW);
+    digitalWrite(MD_controlPin2, HIGH);
+    digitalWrite(MG_controlPin1, HIGH);
+    digitalWrite(MG_controlPin2, LOW);
+    analogWrite(MD_enablePin, 255);
+    analogWrite(MG_enablePin, 255);
+    Serial.println("right");
   }
-  while (millis() < 20000 && millis() >= 15000){
-    analogWrite(MD_enablePin, 64);
-    analogWrite(MG_enablePin, 64);
-  }
-  delay(5000);
 }
