@@ -8,9 +8,6 @@ const int MG_controlPin1 = 8;
 const int MG_controlPin2 = 9;
 const int MG_enablePin = 10;
 
-const int lumGPin = A0;
-const int lumDPin = A1;
-
 /// initiate motors status; 0 = off   1 = on 
 int MD_status = 0;
 int MG_status = 0;
@@ -19,7 +16,9 @@ int MG_status = 0;
 int MD_direction = 0;
 int MG_direction = 0;
 
-/// initiate lum data
+const int lumGPin = A0;
+const int lumDPin = A1;
+
 int lumG;
 int lumD;
 
@@ -31,43 +30,41 @@ void setup() {
   pinMode(MG_controlPin1, OUTPUT);
   pinMode(MG_controlPin2, OUTPUT);
   pinMode(MG_enablePin, OUTPUT);
+  // put your setup code here, to run once:
   Serial.begin(9600);
 }
 
 void loop() {
+  // put your main code here, to run repeatedly:
   lumG = analogRead(lumGPin);
   lumD = analogRead(lumDPin);
   Serial.print("lumG: ");
   Serial.print(lumG);
   Serial.print(" - lumD: ");
-  Serial.println(lumD);  
-  if (abs(lumG-lumD)<200){
-    digitalWrite(MD_controlPin1, HIGH);
-    digitalWrite(MD_controlPin2, LOW);
-    digitalWrite(MG_controlPin1, HIGH);
-    digitalWrite(MG_controlPin2, LOW);
-    analogWrite(MD_enablePin, 200);
-    analogWrite(MG_enablePin, 200);
-    Serial.println("For");
-  }
-  if (abs(lumG-lumD)>100 && min(lumG, lumD) == lumG){
-    delay(500);
+  Serial.println(lumD);
+  digitalWrite(MD_controlPin1, HIGH);
+  digitalWrite(MD_controlPin2, LOW);
+  digitalWrite(MG_controlPin1, HIGH);
+  digitalWrite(MG_controlPin2, LOW);
+  analogWrite(MD_enablePin, 150);
+  analogWrite(MG_enablePin, 150);
+  if (lumG<100){
+    Serial.println("Gauche");
     digitalWrite(MD_controlPin1, HIGH);
     digitalWrite(MD_controlPin2, LOW);
     digitalWrite(MG_controlPin1, LOW);
     digitalWrite(MG_controlPin2, HIGH);
-    analogWrite(MD_enablePin, 255);
-    analogWrite(MG_enablePin, 255);
-    Serial.println("Left");
+    analogWrite(MD_enablePin, 120);
+    analogWrite(MG_enablePin, 120);
   }
-  if (abs(lumG-lumD)>200 && min(lumG, lumD) == lumD){
-    delay(500);
+  if (lumD<100){
+    Serial.println("Droite");
     digitalWrite(MD_controlPin1, LOW);
     digitalWrite(MD_controlPin2, HIGH);
     digitalWrite(MG_controlPin1, HIGH);
     digitalWrite(MG_controlPin2, LOW);
-    analogWrite(MD_enablePin, 255);
-    analogWrite(MG_enablePin, 255);
-    Serial.println("Right");
+    analogWrite(MD_enablePin, 120);
+    analogWrite(MG_enablePin, 120);
   }
+  delay(500); 
 }
