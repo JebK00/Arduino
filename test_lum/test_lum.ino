@@ -48,7 +48,7 @@ void loop() {
   digitalWrite(MG_controlPin2, LOW);
   analogWrite(MD_enablePin, 150);
   analogWrite(MG_enablePin, 150);
-  if (lumG<100){
+  if (lumG<100 & (min(lumG, lumD) == lumG)){
     Serial.println("Gauche");
     digitalWrite(MD_controlPin1, HIGH);
     digitalWrite(MD_controlPin2, LOW);
@@ -57,7 +57,7 @@ void loop() {
     analogWrite(MD_enablePin, 120);
     analogWrite(MG_enablePin, 120);
   }
-  if (lumD<100){
+  if (lumD<100 & (min(lumG, lumD) == lumD)){
     Serial.println("Droite");
     digitalWrite(MD_controlPin1, LOW);
     digitalWrite(MD_controlPin2, HIGH);

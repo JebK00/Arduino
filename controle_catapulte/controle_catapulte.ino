@@ -1,15 +1,24 @@
-const int switchPin = 2;
-const int motorPin = 9;
+const int switchPinB = 1;
+const int switchPinRB = 2;
+const int enablePin = 7;
+const int directionSwitchPin = 7;
 int motorState = LOW;
-int buttonState;
-int lastButtonState = LOW;
+int buttonStateB;
+int buttonStateRB;
+int lastButtonStateB = LOW;
+int lastButtonStateRB = LOW;
+int allowRB = 0;
+
 void setup(){
   pinMode(motorPin, OUTPUT);
-  pinMode(switchPin, INPUT);
+  pinMode(switchPinB, INPUT);
+  pinMode(switchPinRB, INPUT);
 }
+
 void loop() {
-  buttonState = digitalRead(switchPin);
-  if (buttonState == HIGH && lastButtonState == LOW){
+  buttonStateB = digitalRead(switchPin);
+  buttonStateRB = digitalRead(switchPin);
+  if (buttonStateB == HIGH && lastButtonState == LOW){
     if (motorState == HIGH){
       motorState = LOW;
     }
