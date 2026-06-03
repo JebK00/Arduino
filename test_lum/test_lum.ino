@@ -1,7 +1,7 @@
 /// initiate constant variable for control of right motor
 const int MD_controlPin1 = 2;
 const int MD_controlPin2 = 3;
-const int MD_enablePin = 5;
+const int MD_enablePin = 4;
 
 /// initiate constant variable for control of left motor
 const int MG_controlPin1 = 8;
@@ -22,6 +22,12 @@ const int lumDPin = A1;
 int lumG;
 int lumD;
 
+const int bouton = 13;
+const int LEDpin = A2;
+
+int boutonStatus = 0;
+int boutonPreviousStatus = 0;
+
 void setup() {
   pinMode(MD_controlPin1, OUTPUT);
   pinMode(MD_controlPin2, OUTPUT);
@@ -36,35 +42,45 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  lumG = analogRead(lumGPin);
-  lumD = analogRead(lumDPin);
-  Serial.print("lumG: ");
-  Serial.print(lumG);
-  Serial.print(" - lumD: ");
-  Serial.println(lumD);
-  digitalWrite(MD_controlPin1, HIGH);
-  digitalWrite(MD_controlPin2, LOW);
-  digitalWrite(MG_controlPin1, HIGH);
-  digitalWrite(MG_controlPin2, LOW);
-  analogWrite(MD_enablePin, 150);
-  analogWrite(MG_enablePin, 150);
-  if (lumG<100 & (min(lumG, lumD) == lumG)){
-    Serial.println("Gauche");
-    digitalWrite(MD_controlPin1, HIGH);
-    digitalWrite(MD_controlPin2, LOW);
-    digitalWrite(MG_controlPin1, LOW);
-    digitalWrite(MG_controlPin2, HIGH);
-    analogWrite(MD_enablePin, 120);
-    analogWrite(MG_enablePin, 120);
+  boutonStatus = digitalRead(bouton);
+  if (boutonStatus != boutonPreviousStatus){
+    boutonPreviousStatus = boutonPrevious
+    if (boutonStatus = HIGH){
+      lumG = analogRead(lumGPin);
+      lumD = analogRead(lumDPin);
+      Serial.print("lumG: ");
+      Serial.print(lumG);
+      Serial.print(" - lumD: ");
+      Serial.println(lumD);
+      digitalWrite(MD_controlPin1, HIGH);
+      digitalWrite(MD_controlPin2, LOW);
+      digitalWrite(MG_controlPin1, HIGH);
+      digitalWrite(MG_controlPin2, LOW);
+      analogWrite(MD_enablePin, 250);
+      analogWrite(MG_enablePin, 250);
+      if (lumG<10 & (min(lumG, lumD) == lumG)){
+        Serial.println("Gauche");
+        digitalWrite(MD_controlPin1, HIGH);
+        digitalWrite(MD_controlPin2, LOW);
+        digitalWrite(MG_controlPin1, LOW);
+        digitalWrite(MG_controlPin2, HIGH);
+        analogWrite(MD_enablePin, 250);
+        analogWrite(MG_enablePin, 250);
+      }
+      if (lumD<10 & (min(lumG, lumD) == lumD)){
+        Serial.println("Droite");
+        digitalWrite(MD_controlPin1, LOW);
+        digitalWrite(MD_controlPin2, HIGH);
+        digitalWrite(MG_controlPin1, HIGH);
+        digitalWrite(MG_controlPin2, LOW);
+        analogWrite(MD_enablePin, 250);
+        analogWrite(MG_enablePin, 250);
+      }
+      delay(500);
+    }
+    if (boutonStatus = LOW){
+      analogWrite(MD_enablePin, 0);
+      analogWrite(MG_enablePin, 0);
+    }
   }
-  if (lumD<100 & (min(lumG, lumD) == lumD)){
-    Serial.println("Droite");
-    digitalWrite(MD_controlPin1, LOW);
-    digitalWrite(MD_controlPin2, HIGH);
-    digitalWrite(MG_controlPin1, HIGH);
-    digitalWrite(MG_controlPin2, LOW);
-    analogWrite(MD_enablePin, 120);
-    analogWrite(MG_enablePin, 120);
-  }
-  delay(500); 
 }
