@@ -68,7 +68,7 @@ void loop() {
 
     delay(350);
 
-    while (a <= 4) {
+    while (a <= 3) {
       digitalWrite(MD_controlPin1, HIGH);
       digitalWrite(MD_controlPin2, LOW);
       digitalWrite(MG_controlPin1, HIGH);
