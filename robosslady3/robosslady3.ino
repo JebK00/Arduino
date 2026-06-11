@@ -10,11 +10,19 @@ const int MG_enablePin = 10;
 
 /// Initialisation de la broche du bouton
 const int buttonPin = A3;
+const int embobPin = A2;
+
+const int controlPin1 = 5;
+const int controlPin2 = 7;
+const int enablePin = 6;
 
 /// Variables d'état pour le système On/Off
 int buttonState = 0;
 int previousButtonState = 0;
 int robotEnabled = 0;
+
+int embobState = 0;
+bool temp = LOW;
 
 int a = 0;
 
@@ -28,10 +36,15 @@ void setup() {
   pinMode(MG_enablePin, OUTPUT);
   
   // Configuration du bouton en entrée (nécessite une résistance de pull-down matérielle)
-  pinMode(buttonPin, INPUT); 
+  pinMode(buttonPin, INPUT);
+  pinMode(embobPin, INPUT);
 }
 
 void loop() {
+  embobState = digitalRead(embobPin);
+  if(embobState == HIGH){
+    temp = HIGH;
+  }
   // Lecture de l'état du bouton et anti-rebond temporel
   buttonState = digitalRead(buttonPin);
   delay(1); 
@@ -76,7 +89,7 @@ void loop() {
       analogWrite(MD_enablePin, 250);
       analogWrite(MG_enablePin, 250);
 
-      delay(2000);
+      delay(3000);
 
       digitalWrite(MD_controlPin1, LOW);
       digitalWrite(MD_controlPin2, HIGH);
@@ -85,7 +98,7 @@ void loop() {
       analogWrite(MD_enablePin, 200);
       analogWrite(MG_enablePin, 200);
 
-      delay(1200);
+      delay(3000);
 
       digitalWrite(MD_controlPin1, HIGH);
       digitalWrite(MD_controlPin2, LOW);
@@ -94,7 +107,7 @@ void loop() {
       analogWrite(MD_enablePin, 200);
       analogWrite(MG_enablePin, 200);
 
-      delay(200);
+      delay(100);
 
       digitalWrite(MD_controlPin1, HIGH);
       digitalWrite(MD_controlPin2, LOW);
@@ -112,7 +125,7 @@ void loop() {
       analogWrite(MD_enablePin, 200);
       analogWrite(MG_enablePin, 200);
 
-      delay(1200);
+      delay(3000);
 
       digitalWrite(MD_controlPin1, LOW);
       digitalWrite(MD_controlPin2, HIGH);
@@ -121,7 +134,7 @@ void loop() {
       analogWrite(MD_enablePin, 200);
       analogWrite(MG_enablePin, 200);
 
-      delay(200);
+      delay(100);
       a = a + 1;
     }
   } else {
@@ -132,6 +145,13 @@ void loop() {
     digitalWrite(MD_controlPin2, LOW);
     digitalWrite(MG_controlPin1, LOW);
     digitalWrite(MG_controlPin2, LOW);
+  }
+  if (temp = HIGH){
+    digitalWrite(controlPin1, HIGH);
+    digitalWrite(controlPin2, LOW);
+    analogWrite(enablePin, HIGH);
+    delay(5000);
+    temp = LOW;
   }
   
   // Sauvegarde de l'état actuel pour la prochaine itération
